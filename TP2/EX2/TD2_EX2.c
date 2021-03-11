@@ -77,8 +77,10 @@ void remove_node(list L, list node_adress)
 	{
 		temp = temp->next;
 	}
+	list temp2 = node_adress;
 	node_adress = node_adress->next;
 	temp->next = node_adress;
+	free(temp2);
 	return ;
 
 }
