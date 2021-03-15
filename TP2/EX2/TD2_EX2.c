@@ -6,23 +6,23 @@
 struct node
 {
 	int data;
-	struct node * next;	
+	struct node * next;
 };
 typedef struct node node;
-typedef struct node *list;
+typedef struct node * list;
 
 // Functions
 list create_node(int);
 void add_node(int, list);
 list array_to_list(int, int[]);
 void print_list(list);
-void remove_node(list, list);
+void remove_node(list *, int);
 
 list create_node(int data)
 {
 	list new = (node *)malloc(sizeof(node)); // Allocate a node
 	new->data = data; // Put the data in the node
-	new->next = NULL; 
+	new->next = NULL;
 	return new;
 }
 
@@ -37,7 +37,7 @@ void add_node(int data, list L)
 	}
 	while(last->next != NULL)
 		last = last->next; // Traverse the list
-	last->next = new; 
+	last->next = new;
 	return ;
 }
 
@@ -62,27 +62,52 @@ void print_list(list L)
 		while(last->next != NULL)
 		{
 			printf("%d, ", last->data);
-			last = last->next; 
+			last = last->next;
 		}
 		if(last!=NULL)
 			printf("%d", last->data);
 		printf("]\n");
 	}
 }
-	
-void remove_node(list L, list node_adress)
-{
-	list temp = L;
-	while(temp->next != node_adress)
-	{
-		temp = temp->next;
-	}
-	list temp2 = node_adress;
-	node_adress = node_adress->next;
-	temp->next = node_adress;
-	free(temp2);
-	return ;
 
+void remove_node(list *L, int index)
+{
+	list temp = *L;
+	unsigned l=0;
+    if(*L!=NULL)
+    {
+        list temp=*L;
+        while(temp!=NULL)
+        {
+            l+=1;
+            temp=temp->next;
+        }
+    }
+	if(index==0)
+	{
+		if(*L!=NULL)
+		{
+			list temp=*L;
+			*L=(*L)->next;
+			free(temp);
+	}
+		return;
+	}
+	else
+	{
+		list temp1 = *L;
+        unsigned j = 0;
+        while(j<index-1)
+        {
+              temp1 = temp1->next;
+              j++;
+        }
+        list temp2 = temp1;
+        temp1= temp1->next;
+        temp2->next = temp1->next;
+        free(temp1);
+        return ;
+	}
 }
 
 int main()
@@ -98,7 +123,7 @@ int main()
 	int arr[10] = {1,2,3,4,5,6,7,8,9,10};
 	list T = array_to_list(10, arr);
 	print_list(T);
-	remove_node(T, T->next);
+	remove_node(&T, 3);
 	print_list(T);
 	return 0;
 }
